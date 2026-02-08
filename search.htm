@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BPI Shotshell Load Search</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .result-item { border-bottom: 1px solid #eee; padding: 10px 0; }
+        .result-item:last-child { border-bottom: none; }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+
+
+<div class="container">
+    <h2>Shotshell Load Finder</h2>
+
+    <select id="gaugeFilter" onchange="searchLoads()">
+        <option value="">All Gauges</option>
+        <option value="10">10 Gauge</option>
+        <option value="12">12 Gauge</option>
+        <option value="16">16 Gauge</option>
+        <option value="20">20 Gauge</option>
+        <option value="28">28 Gauge</option>
+        <option value="410">.410 Bore</option>
+    </select>
+
+    <input type="text" id="searchInput" placeholder="Search by Hull or Powder (e.g. Longshot)..." onkeyup="searchLoads()">
+    <div id="results"></div>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+
+
+</body>
+</html>
