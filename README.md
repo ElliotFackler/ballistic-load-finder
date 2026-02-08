@@ -15,7 +15,13 @@ A modern, high-performance search tool for shotshell reloading data.
 1. Clone the repo: `git clone https://github.com/ElliotFackler/ballistic-load-finder.git`
 2. Copy `config.example.js` to `config.js`.
 3. Enter your own Supabase credentials in `config.js`.
-4. Open `index.htm` in any modern browser.
+4. Open `search.htm` in any modern browser.
 
 ## 🛡️ Security Note
 This project utilizes Supabase RLS to ensure that the public has read-only access to the load data, protecting the database integrity.
+
+
+## Planned items
+* Add more filters drop-down menu
+* Make the search bar work for keywords
+* Add slider for FPS and PSI

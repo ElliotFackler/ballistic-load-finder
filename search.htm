@@ -27,11 +27,17 @@
         <option value="12">12 Gauge</option>
         <option value="16">16 Gauge</option>
         <option value="20">20 Gauge</option>
+        <option value="16">24 Gauge</option>
         <option value="28">28 Gauge</option>
+        <option value="16">32 Gauge</option>
         <option value="410">.410 Bore</option>
     </select>
 
     <input type="text" id="searchInput" placeholder="Search by Hull or Powder (e.g. Longshot)..." onkeyup="searchLoads()">
+
+    <div class="results-meta">
+        Showing <span id="loadCount">0</span> loads
+    </div>
     <div id="results"></div>
 </div>
 
