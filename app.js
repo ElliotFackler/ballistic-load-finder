@@ -16,12 +16,7 @@ async function searchLoads() {
         request = request.eq('gauge', gauge);
     }
 
-    // Filter by text if user typed 2+ characters
     if (query.length > 1) {
-        request = request.or(`hull.ilike.%${query}%,powder.ilike.%${query}%`);
-    }
-
-    if (query) {
         const searchString = `hull.ilike.%${query}%,powder.ilike.%${query}%,wad.ilike.%${query}%,primer.ilike.%${query}%,shot.ilike.%${query}%`;
         request = request.or(searchString);
     }
@@ -56,26 +51,30 @@ function renderResults(loads) {
     }
 
     resultsDiv.innerHTML = loads.map(item => `
-        <div class="result-item">
-            <strong>${item.gauge}ga - ${item.hull}</strong><br>
+    <div class="result-item">
+        <div class="load-main">
+            <div class="load-title">
+                <span class="gauge-pill">${item.gauge}ga <strong>${item.hull}</strong></div>
             <div class="badge-container">
-                <span class="badge">Wad: ${item.wad}</span>
-                <span class="badge">Powder: ${item.powder}</span>
-                <span class="badge">Primer: ${item.primer}</span>
-            </div>
-            <div class="load-stats">
-                <div class="stat-box">
-                    <span class="stat-label">Velocity</span>
-                    <span class="stat-value">${item.velocity}</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-label">Pressure</span>
-                    <span class="stat-value">${item.pressure}</span>
-                <div class="stat-box">
-                </div>
+                <span class="spec-badge">${item.shot}</span>
+                <span class="spec-badge">${item.powder}</span>
+                <span class="spec-badge">${item.wad}</span>
+                <span class="spec-badge">${item.primer}</span>
             </div>
         </div>
-    `).join('');
+
+        <div class="load-stats">
+            <div class="stat-box">
+                <span class="stat-label">FPS</span>
+                <span class="stat-value">${item.velocity}</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">PSI</span>
+                <span class="stat-value">${item.pressure}</span>
+            </div>
+        </div>
+    </div>
+`).join('');
 }
 
 // 4. Run once on page load
