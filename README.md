@@ -23,6 +23,10 @@ This project utilizes Supabase RLS to ensure that the public has read-only acces
 
 ## Planned items
 * Add more filters drop-down menu
-* Make the search bar work for keywords
 * Add slider for FPS and PSI
 * Add read more to link to load specific articles.
+
+## Gallery
+<p align="center">
+  <img src="assets/desktop-view.png" alt="Desktop UI View" width="80%">
+</p>
