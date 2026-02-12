@@ -12,10 +12,9 @@
         .result-item:last-child { border-bottom: none; }
     </style>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
 </head>
 <body>
-
-
 
 
 <div class="container">
@@ -34,6 +33,16 @@
     </select>
 
     <input type="text" id="searchInput" placeholder="Search by component (e.g. Hull, Wad)..." onkeyup="searchLoads()">
+
+    <div class="slider-wrapper">
+        <h3>FPS Range</h3>
+        <div id="fps-slider"></div>
+        <p>
+            Selected: <span id="fps-min-label"></span> - <span id="fps-max-label"></span>
+        </p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
     <div class="results-meta">
         Showing <span id="loadCount">0</span> loads

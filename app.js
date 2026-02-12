@@ -1,3 +1,4 @@
+
 // 1. Initialize connection
 const _supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
 
@@ -6,9 +7,30 @@ async function searchLoads() {
     const query = document.getElementById('searchInput').value;
     const gauge = Number(document.getElementById('gaugeFilter').value);
     const resultsDiv = document.getElementById('results');
+    const fpsSlider = document.getElementById('fps-slider');
+    const fpsMinLabel = document.getElementById('fps-min-label');
+    const fpsMaxLabel = document.getElementById('fps-max-label');
 
     let request = _supabase.from('shotshell_loads').select('*');
 
+    noUiSlider.create(fpsSlider, {
+        start: [100, 10000],
+        connect: true,
+        step: 1,
+        range: {
+            min: 100, 
+            max: 10000
+        }
+    });
+// Maybe add format {}
+
+    fpsSlider.noUiSlider.on('update', function (values, handle) {
+        if (handle === 0) {
+            fpsMinLabel.innerHTML = values[0];
+        } else {
+            fpsMaxLabel.innerHTML = values[1];
+        }
+    });
     
 
     // Filter by gauge if selected

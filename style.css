@@ -25,8 +25,19 @@ select, input { /* Input */
     outline: none;
 }
 
+.slider-wrapper {
+    padding: 20px;
+    max-width: 400px;
+    border: 10px red;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.noUi-connect {
+    border: 10px red;
+}
+
 select:focus, input:focus {
-    border-color: #d32f2f; /* Highlight when focused */
+    border: 2px #d32f2f; /* Highlight when focused */
     box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1); /* Subtle red glow */
 }
 
