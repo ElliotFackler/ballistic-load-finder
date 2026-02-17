@@ -1,42 +1,28 @@
 
-// 1. Initialize connection
+// 1. Initialize connection & create constants
 const _supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+const query = document.getElementById('searchInput').value;
+const gauge = Number(document.getElementById('gaugeFilter').value);
+const resultsDiv = document.getElementById('results');
+const fpsSlider = document.getElementById('fps-slider');
+const fpsMinLabel = document.getElementById('fps-min-label');
+const fpsMaxLabel = document.getElementById('fps-max-label');
 
 // 2. The Search Function
 async function searchLoads() {
-    const query = document.getElementById('searchInput').value;
-    const gauge = Number(document.getElementById('gaugeFilter').value);
-    const resultsDiv = document.getElementById('results');
-    const fpsSlider = document.getElementById('fps-slider');
-    const fpsMinLabel = document.getElementById('fps-min-label');
-    const fpsMaxLabel = document.getElementById('fps-max-label');
-
+    
+    // Take all data from the SQL table
     let request = _supabase.from('shotshell_loads').select('*');
 
-    noUiSlider.create(fpsSlider, {
-        start: [100, 10000],
-        connect: true,
-        step: 1,
-        range: {
-            min: 100, 
-            max: 10000
-        }
-    });
-// Maybe add format {}
-
-    fpsSlider.noUiSlider.on('update', function (values, handle) {
-        if (handle === 0) {
-            fpsMinLabel.innerHTML = values[0];
-        } else {
-            fpsMaxLabel.innerHTML = values[1];
-        }
-    });
+    // Get values of slider
+    values = fpsSlider.noUiSlider.get();
     
-
     // Filter by gauge if selected
     if (gauge) {
         request = request.eq('gauge', gauge);
     }
+
+    request = request.gte('velocity', Math.round(values[0])).lte('velocity', Math.round(values[1]));
 
     if (query.length > 1) {
         const searchString = `hull.ilike.%${query}%,powder.ilike.%${query}%,wad.ilike.%${query}%,primer.ilike.%${query}%,shot.ilike.%${query}%`;
@@ -99,5 +85,35 @@ function renderResults(loads) {
 `).join('');
 }
 
+function createSlider() {
+    noUiSlider.create(fpsSlider, {
+        start: [100, 10000],
+        connect: true,
+        step: 1,
+        range: {
+            min: 100, 
+            max: 10000
+        }
+    });
+
+    fpsSlider.noUiSlider.on('update', function (values, handle) {
+    if (handle === 0) {
+        fpsMinLabel.innerHTML = values[0];
+    } else {
+        fpsMaxLabel.innerHTML = values[1];
+    }
+    });
+
+    fpsSlider.noUiSlider.on('change', function () {
+        searchLoads();
+    });
+}
+
 // 4. Run once on page load
-window.onload = searchLoads;
+function initApp() {
+    createSlider();
+    searchLoads();
+}
+
+// Start the app
+document.addEventListener('DOMContentLoaded', initApp);
