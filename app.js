@@ -1,8 +1,6 @@
 
 // 1. Initialize connection & create constants
 const _supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
-const query = document.getElementById('searchInput').value;
-const gauge = Number(document.getElementById('gaugeFilter').value);
 const resultsDiv = document.getElementById('results');
 const fpsSlider = document.getElementById('fps-slider');
 const psiSlider = document.getElementById('psi-slider');
@@ -16,15 +14,14 @@ async function searchLoads() {
     
     // Take all data from the SQL table
     let request = _supabase.from('shotshell_loads').select('*');
+    const query = document.getElementById('searchInput').value;
+    const gauge = Number(document.getElementById('gaugeFilter').value);
 
     // Get values of slider
     values = fpsSlider.noUiSlider.get();
     psiValues = psiSlider.noUiSlider.get();
     
-    // Filter by gauge if selected
-    if (gauge) {
-        request = request.eq('gauge', gauge);
-    }
+    
 
     request = request.gte('velocity', Math.round(values[0])).lte('velocity', Math.round(values[1]));
     request = request.gte('pressure', Math.round(psiValues[0])).lte('pressure', Math.round(psiValues[1]));
@@ -32,6 +29,12 @@ async function searchLoads() {
     if (query.length > 1) {
         const searchString = `hull.ilike.%${query}%,powder.ilike.%${query}%,wad.ilike.%${query}%,primer.ilike.%${query}%,shot.ilike.%${query}%`;
         request = request.or(searchString);
+    }
+
+    // Filter by gauge if selected
+    if (gauge) {
+        console.log(gauge);
+        request = request.eq('gauge', gauge);
     }
 
     const { data, error } = await request.limit(20);
@@ -137,6 +140,10 @@ function createpsiSlider() {
     psiSlider.noUiSlider.on('change', function () {
         searchLoads();
     });
+}
+
+function setUpEventListeners() {
+
 }
 
 // 4. Run once on page load
