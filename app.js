@@ -5,8 +5,11 @@ const query = document.getElementById('searchInput').value;
 const gauge = Number(document.getElementById('gaugeFilter').value);
 const resultsDiv = document.getElementById('results');
 const fpsSlider = document.getElementById('fps-slider');
+const psiSlider = document.getElementById('psi-slider');
 const fpsMinLabel = document.getElementById('fps-min-label');
 const fpsMaxLabel = document.getElementById('fps-max-label');
+const psiMinLabel = document.getElementById('psi-min-label');
+const psiMaxLabel = document.getElementById('psi-max-label');
 
 // 2. The Search Function
 async function searchLoads() {
@@ -16,6 +19,7 @@ async function searchLoads() {
 
     // Get values of slider
     values = fpsSlider.noUiSlider.get();
+    psiValues = psiSlider.noUiSlider.get();
     
     // Filter by gauge if selected
     if (gauge) {
@@ -23,6 +27,7 @@ async function searchLoads() {
     }
 
     request = request.gte('velocity', Math.round(values[0])).lte('velocity', Math.round(values[1]));
+    request = request.gte('pressure', Math.round(psiValues[0])).lte('pressure', Math.round(psiValues[1]));
 
     if (query.length > 1) {
         const searchString = `hull.ilike.%${query}%,powder.ilike.%${query}%,wad.ilike.%${query}%,primer.ilike.%${query}%,shot.ilike.%${query}%`;
@@ -87,12 +92,12 @@ function renderResults(loads) {
 
 function createSlider() {
     noUiSlider.create(fpsSlider, {
-        start: [100, 10000],
+        start: [1000, 2000],
         connect: true,
         step: 1,
         range: {
-            min: 100, 
-            max: 10000
+            min: 1000, 
+            max: 2000
         }
     });
 
@@ -109,9 +114,35 @@ function createSlider() {
     });
 }
 
+
+function createpsiSlider() {
+    noUiSlider.create(psiSlider, {
+        start: [1000, 20000],
+        connect: true,
+        step: 1,
+        range: {
+            min: 1000, 
+            max: 20000
+        }
+    });
+
+    psiSlider.noUiSlider.on('update', function (values, handle) {
+    if (handle === 0) {
+        psiMinLabel.innerHTML = values[0];
+    } else {
+        psiMaxLabel.innerHTML = values[1];
+    }
+    });
+
+    psiSlider.noUiSlider.on('change', function () {
+        searchLoads();
+    });
+}
+
 // 4. Run once on page load
 function initApp() {
     createSlider();
+    createpsiSlider();
     searchLoads();
 }
 

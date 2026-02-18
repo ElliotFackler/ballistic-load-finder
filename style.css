@@ -32,6 +32,24 @@ select, input { /* Input */
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+.psi-slider-wrapper {
+    padding: 20px;
+    max-width: 400px;
+    border: 10px red;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.slider-container {
+    display: flex;
+    /* Lil gap between sliders */
+    column-gap: 20px;
+}
+
+.slider-wrapper, .psi-slider-wrapper {
+    /* Makes them the same size */
+    flex: 1;
+}
+
 .noUi-connect {
     border: 10px red;
 }
