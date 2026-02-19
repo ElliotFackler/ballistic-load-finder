@@ -30,12 +30,12 @@ This project utilizes Supabase RLS to ensure that the public has read-only acces
 <p align="center">
   <table>
     <tr>
-      <td><img src="assets/desktop-view.jpg" alt="First View" width="100%"></td>
-      <td><img src="assets/desktop-view-2.jpg" alt="Second View" width="100%"></td>
+      <td><img src="assets/desktop-view.png" alt="First View" width="100%"></td>
+      <td><img src="assets/desktop-view-2.png" alt="Second View" width="100%"></td>
     </tr>
     <tr>
-      <td align="center"><b>Desktop View</b></td>
-      <td align="center"><b>Mobile View</b></td>
+      <td align="center"><b>First Edition View</b></td>
+      <td align="center"><b>Current View</b></td>
     </tr>
   </table>
 </p>
