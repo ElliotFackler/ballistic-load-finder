@@ -88,6 +88,9 @@ function renderResults(loads) {
                 <span class="stat-label">PSI</span>
                 <span class="stat-value">${item.pressure}</span>
             </div>
+            <div class="button">
+                <button type="button">View Recipe</button>
+            </div>
         </div>
     </div>
 `).join('');
@@ -103,6 +106,8 @@ function createSlider() {
             max: 2000
         }
     });
+
+    values = fpsSlider.noUiSlider.get();
 
     fpsSlider.noUiSlider.on('update', function (values, handle) {
     if (handle === 0) {
@@ -128,6 +133,8 @@ function createpsiSlider() {
             max: 20000
         }
     });
+
+    values = psiSlider.noUiSlider.get();
 
     psiSlider.noUiSlider.on('update', function (values, handle) {
     if (handle === 0) {
