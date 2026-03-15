@@ -8,9 +8,26 @@ const fpsMinLabel = document.getElementById('fps-min-label');
 const fpsMaxLabel = document.getElementById('fps-max-label');
 const psiMinLabel = document.getElementById('psi-min-label');
 const psiMaxLabel = document.getElementById('psi-max-label');
+const loadingIndicator = document.getElementById('loadingIndicator');
+
+// Debounce helper
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
 
 // 2. The Search Function
 async function searchLoads() {
+    
+    loadingIndicator.style.display = 'block';
+    resultsDiv.innerHTML = '';
     
     // Take all data from the SQL table
     let request = _supabase.from('shotshell_loads').select('*');
@@ -18,8 +35,8 @@ async function searchLoads() {
     const gauge = Number(document.getElementById('gaugeFilter').value);
 
     // Get values of slider
-    values = fpsSlider.noUiSlider.get();
-    psiValues = psiSlider.noUiSlider.get();
+    const values = fpsSlider.noUiSlider.get();
+    const psiValues = psiSlider.noUiSlider.get();
     
     
 
@@ -48,6 +65,7 @@ async function searchLoads() {
     }
 
     console.log( data, error );
+    loadingIndicator.style.display = 'none';
 
     if (error) {
         resultsDiv.innerHTML = `<p style="color:red">Error: ${error.message}</p>`;
@@ -96,67 +114,45 @@ function renderResults(loads) {
 `).join('');
 }
 
-function createSlider() {
-    noUiSlider.create(fpsSlider, {
-        start: [1000, 2000],
+function initSlider(slider, minLabel, maxLabel, min, max) {
+    noUiSlider.create(slider, {
+        start: [min, max],
         connect: true,
         step: 1,
         range: {
-            min: 1000, 
-            max: 2000
+            min: min, 
+            max: max
         }
     });
 
-    values = fpsSlider.noUiSlider.get();
-
-    fpsSlider.noUiSlider.on('update', function (values, handle) {
-    if (handle === 0) {
-        fpsMinLabel.innerHTML = values[0];
-    } else {
-        fpsMaxLabel.innerHTML = values[1];
-    }
-    });
-
-    fpsSlider.noUiSlider.on('change', function () {
-        searchLoads();
-    });
-}
-
-
-function createpsiSlider() {
-    noUiSlider.create(psiSlider, {
-        start: [1000, 20000],
-        connect: true,
-        step: 1,
-        range: {
-            min: 1000, 
-            max: 20000
+    slider.noUiSlider.on('update', function (values, handle) {
+        if (handle === 0) {
+            minLabel.innerHTML = Math.round(values[0]);
+        } else {
+            maxLabel.innerHTML = Math.round(values[1]);
         }
     });
 
-    values = psiSlider.noUiSlider.get();
-
-    psiSlider.noUiSlider.on('update', function (values, handle) {
-    if (handle === 0) {
-        psiMinLabel.innerHTML = values[0];
-    } else {
-        psiMaxLabel.innerHTML = values[1];
-    }
-    });
-
-    psiSlider.noUiSlider.on('change', function () {
+    slider.noUiSlider.on('change', function () {
         searchLoads();
     });
 }
 
 function setUpEventListeners() {
+    const searchInput = document.getElementById('searchInput');
+    const gaugeFilter = document.getElementById('gaugeFilter');
 
+    const debouncedSearch = debounce(searchLoads, 300);
+
+    searchInput.addEventListener('input', debouncedSearch);
+    gaugeFilter.addEventListener('change', searchLoads);
 }
 
 // 4. Run once on page load
 function initApp() {
-    createSlider();
-    createpsiSlider();
+    initSlider(fpsSlider, fpsMinLabel, fpsMaxLabel, 1000, 2000);
+    initSlider(psiSlider, psiMinLabel, psiMaxLabel, 1000, 20000);
+    setUpEventListeners();
     searchLoads();
 }
 

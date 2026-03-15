@@ -1,0 +1,22 @@
+[
+  {
+    "gauge": 12,
+    "hull": "Fiocchi 2-3/4\"",
+    "powder": "Longshot",
+    "wad": "Fed 12S3",
+    "primer": "Fio 616",
+    "shot": "Lead 1-1/8 oz",
+    "velocity": 1450,
+    "pressure": 9500
+  },
+  {
+    "gauge": 20,
+    "hull": "Remington STS",
+    "powder": "Unique",
+    "wad": "Rem RXP20",
+    "primer": "Rem 209P",
+    "shot": "Lead 7/8 oz",
+    "velocity": 1200,
+    "pressure": 10200
+  }
+]
