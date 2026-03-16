@@ -6,20 +6,25 @@
 
 body {
     font-family: 'Inter', system-ui, sans-serif;
-    background-color: #dee2e8; /* Background light gray */
-    color: #090909; /* Text color */
+    background-color: #f4f7f5;
+    /* Soft light green tinted background */
+    color: #090909;
+    /* Text color */
 }
 
 .controls-container {
     display: flex;
-    gap: 15px; /* Adds space between the input and the dropdown */
+    gap: 15px;
+    /* Adds space between the input and the dropdown */
     margin-bottom: 30px;
 }
 
 
-select, input { /* Input */
+select,
+input {
+    /* Input */
     padding: 12px 16px;
-    border: 1px solid #d8dee8; 
+    border: 1px solid #d8dee8;
     border-radius: 8px;
     font-size: 1rem;
     outline: none;
@@ -43,13 +48,27 @@ select, input { /* Input */
     column-gap: 20px;
 }
 
-.slider-wrapper, .psi-slider-wrapper {
+.slider-wrapper,
+.psi-slider-wrapper {
     /* Makes them the same size */
     flex: 1;
 }
 
 .noUi-connect {
-    background: #d32f2f; /* Match the red theme */
+    background: #355E3B;
+    /* Match the hunter green theme */
+}
+
+/* Make slider handles look modern */
+.noUi-handle {
+    border-radius: 50% !important;
+    background: white !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid #d8dee8 !important;
+}
+.noUi-handle::before,
+.noUi-handle::after {
+    display: none; /* Hide default lines inside slider handle */
 }
 
 .loading-indicator {
@@ -59,12 +78,16 @@ select, input { /* Input */
     font-weight: 600;
 }
 
-select:focus, input:focus {
-    border: 2px #d32f2f; /* Highlight when focused */
-    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1); /* Subtle red glow */
+select:focus,
+input:focus {
+    border: 1px solid #355E3B;
+    /* Highlight when focused */
+    box-shadow: 0 0 0 3px rgba(53, 94, 59, 0.15);
+    /* Subtle green glow */
 }
 
-.result-item { /* Load Item Results */
+.result-item {
+    /* Load Item Results */
     background: rgb(255, 255, 255);
     margin-bottom: 1rem;
     padding: 20px;
@@ -73,18 +96,26 @@ select:focus, input:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.2s ease;
+}
+
+.result-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Force the left side (Title + Badges) to stack vertically */
 .load-main {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 8px;
-    flex: 1; /* This lets the left side take up the most room */
+    flex: 1;
+    /* This lets the left side take up the most room */
 }
 
 .gauge-pill {
-    background: #2c3e50; /* Deep gunmetal */
+    background: #2c3e50;
+    /* Deep gunmetal */
     color: white;
     padding: 2px 8px;
     border-radius: 4px;
@@ -131,5 +162,36 @@ select:focus, input:focus {
 }
 
 #loadCount {
-    color: #d32f2f; /* Red color for load count */
+    color: #355E3B;
+    background: #e9f0ea;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.view-recipe-btn {
+    background-color: #355E3B;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(53, 94, 59, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view-recipe-btn:hover {
+    background-color: #2A4B2F;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(53, 94, 59, 0.45);
+}
+
+.view-recipe-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(53, 94, 59, 0.35);
 }

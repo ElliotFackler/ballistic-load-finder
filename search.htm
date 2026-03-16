@@ -1,70 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BPI Shotshell Load Search</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .result-item { border-bottom: 1px solid #eee; padding: 10px 0; }
-        .result-item:last-child { border-bottom: none; }
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .result-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
     </style>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
 </head>
+
 <body>
 
 
-<div class="container">
-    <h2>Shotshell Load Finder</h2>
+    <div class="container">
+        <div class="header" style="margin-bottom: 25px;">
+            <h2 style="margin-bottom: 8px;">Shotshell Load Finder</h2>
+            <p style="color: #64748b; font-size: 0.95rem; margin-top: 0;">Search, filter, and discover the perfect recipe for your shotshell reloading.</p>
+        </div>
 
-    <select id="gaugeFilter">
-        <option value="">All Gauges</option>
-        <option value="10">10 Gauge</option>
-        <option value="12">12 Gauge</option>
-        <option value="16">16 Gauge</option>
-        <option value="20">20 Gauge</option>
-        <option value="16">24 Gauge</option>
-        <option value="28">28 Gauge</option>
-        <option value="16">32 Gauge</option>
-        <option value="410">.410 Bore</option>
-    </select>
+        <div class="controls-container">
+            <select id="gaugeFilter">
+                <option value="">All Gauges</option>
+                <option value="10">10 Gauge</option>
+                <option value="12">12 Gauge</option>
+                <option value="16">16 Gauge</option>
+                <option value="20">20 Gauge</option>
+                <option value="24">24 Gauge</option>
+                <option value="28">28 Gauge</option>
+                <option value="32">32 Gauge</option>
+                <option value="410">.410 Bore</option>
+            </select>
 
-    <input type="text" id="searchInput" placeholder="Search by component (e.g. Hull, Wad)...">
+            <input type="text" id="searchInput" placeholder="Search by component (e.g. Hull, Wad)..." style="flex: 1;">
+        </div>
 
-    <div class="slider-container">
-    <div class="slider-wrapper">
-        <h3>FPS Range</h3>
-        <div id="fps-slider"></div>
-        <p>
-            Selected: <span id="fps-min-label"></span> - <span id="fps-max-label"></span>
-        </p>
+        <div class="slider-container">
+            <div class="slider-wrapper">
+                <h3>FPS Range</h3>
+                <div id="fps-slider"></div>
+                <p>
+                    Selected: <span id="fps-min-label"></span> - <span id="fps-max-label"></span>
+                </p>
+            </div>
+
+            <div class="psi-slider-wrapper">
+                <h3>PSI Range</h3>
+                <div id="psi-slider"></div>
+                <p>
+                    Selected: <span id="psi-min-label"></span> - <span id="psi-max-label"></span>
+                </p>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+
+        <div class="results-meta">
+            Showing <span id="loadCount">0</span> loads
+        </div>
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">Loading loads...</div>
+        <div id="results"></div>
     </div>
 
-    <div class="psi-slider-wrapper">
-        <h3>PSI Range</h3>
-        <div id="psi-slider"></div>
-        <p>
-            Selected: <span id="psi-min-label"></span> - <span id="psi-max-label"></span>
-        </p>
-    </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
-
-    <div class="results-meta">
-        Showing <span id="loadCount">0</span> loads
-    </div>
-    <div id="loadingIndicator" class="loading-indicator" style="display: none;">Loading loads...</div>
-    <div id="results"></div>
-</div>
-
-<script src="config.js"></script>
-<script src="app.js"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
 
 
 </body>
+
 </html>
