@@ -55,7 +55,7 @@ input {
 }
 
 .noUi-connect {
-    background: #355E3B;
+    background: #355E3B !important;
     /* Match the hunter green theme */
 }
 
@@ -194,4 +194,114 @@ input:focus {
 .view-recipe-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 4px rgba(53, 94, 59, 0.35);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-top: 10px;
+}
+
+.empty-icon {
+    width: 64px;
+    height: 64px;
+    color: #94a3b8;
+    margin-bottom: 16px;
+}
+
+.empty-title {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.empty-suggestion {
+    color: #64748b;
+    font-size: 0.95rem;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+.favorite-icon-btn {
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.favorite-icon-btn svg {
+    width: 22px;
+    height: 22px;
+}
+
+.favorite-icon-btn:hover {
+    color: #fbbf24;
+    transform: scale(1.1);
+}
+
+.favorite-icon-btn.active {
+    color: #f59e0b; /* Golden star */
+}
+
+.favorites-header-btn {
+    background-color: white;
+    color: #475569;
+    border: 1px solid #d8dee8;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.favorites-header-btn svg {
+    width: 16px;
+    height: 16px;
+    color: #f59e0b;
+}
+
+.favorites-header-btn:hover {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.favorites-header-btn.active {
+    background-color: #FEF3C7;
+    border-color: #FDE68A;
+    color: #B45309;
+}
+
+.load-more-btn {
+    background-color: white;
+    color: #355E3B; /* Theme green text */
+    border: 1px solid #355E3B;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.load-more-btn:hover {
+    background-color: #f0fdf4; /* Subtle green background */
+    box-shadow: 0 2px 4px rgba(53, 94, 59, 0.15);
+}
+
+.load-more-btn:active {
+    transform: translateY(2px);
+    box-shadow: none;
 }
