@@ -90,12 +90,48 @@ const PAGE_SIZE = 20;
 let currentOffset = 0;
 let currentLoads = [];
 
+function updateURL() {
+    if (showingFavorites) return;
+
+    const gauge = document.getElementById('gaugeFilter').value;
+    const hull = document.getElementById('hullFilter').value;
+    const powder = document.getElementById('powderFilter').value;
+    const search = document.getElementById('searchInput').value;
+    const sort = document.getElementById('sortFilter').value;
+    
+    const fpsValues = fpsSlider.noUiSlider ? fpsSlider.noUiSlider.get() : [1000, 2000];
+    const psiValues = psiSlider.noUiSlider ? psiSlider.noUiSlider.get() : [1000, 20000];
+    
+    const params = new URLSearchParams();
+    
+    if (gauge) params.set('gauge', gauge);
+    if (hull) params.set('hull', hull);
+    if (powder) params.set('powder', powder);
+    if (search) params.set('search', search);
+    if (sort) params.set('sort', sort);
+    
+    const fpsMin = Math.round(fpsValues[0]);
+    const fpsMax = Math.round(fpsValues[1]);
+    if (fpsMin > 1000) params.set('fps_min', fpsMin);
+    if (fpsMax < 2000) params.set('fps_max', fpsMax);
+    
+    const psiMin = Math.round(psiValues[0]);
+    const psiMax = Math.round(psiValues[1]);
+    if (psiMin > 1000) params.set('psi_min', psiMin);
+    if (psiMax < 20000) params.set('psi_max', psiMax);
+    
+    const queryString = params.toString();
+    const newUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
+    window.history.replaceState({}, '', newUrl);
+}
+
 // 2. The Search Function
 async function searchLoads(isLoadMore) {
     const isMore = isLoadMore === true;
     if (showingFavorites) return;
     
     if (!isMore) {
+        updateURL();
         currentOffset = 0;
         currentLoads = [];
         loadingIndicator.style.display = 'block';
@@ -109,6 +145,8 @@ async function searchLoads(isLoadMore) {
     let request = _supabase.from('shotshell_loads').select('*', { count: 'exact' });
     const query = document.getElementById('searchInput').value;
     const gauge = Number(document.getElementById('gaugeFilter').value);
+    const hull = document.getElementById('hullFilter').value;
+    const powder = document.getElementById('powderFilter').value;
 
     // Get values of slider
     const values = fpsSlider.noUiSlider.get();
@@ -122,10 +160,20 @@ async function searchLoads(isLoadMore) {
         request = request.or(searchString);
     }
 
-    // Filter by gauge if selected
-    if (gauge) {
-        console.log(gauge);
-        request = request.eq('gauge', gauge);
+    // Filter by specific dropdowns if selected
+    if (gauge) request = request.eq('gauge', gauge);
+    if (hull) request = request.eq('hull', hull);
+    if (powder) request = request.eq('powder', powder);
+
+    const sortFilter = document.getElementById('sortFilter').value;
+    if (sortFilter === 'velocity_desc') {
+        request = request.order('velocity', { ascending: false });
+    } else if (sortFilter === 'velocity_asc') {
+        request = request.order('velocity', { ascending: true });
+    } else if (sortFilter === 'pressure_desc') {
+        request = request.order('pressure', { ascending: false });
+    } else if (sortFilter === 'pressure_asc') {
+        request = request.order('pressure', { ascending: true });
     }
 
     const { data, error, count } = await request.range(currentOffset, currentOffset + PAGE_SIZE - 1);
@@ -221,14 +269,14 @@ function renderResults(loads, totalCount = 0) {
     resultsDiv.innerHTML = loadsHtml + loadMoreHtml;
 }
 
-function initSlider(slider, minLabel, maxLabel, min, max) {
+function initSlider(slider, minLabel, maxLabel, rangeMin, rangeMax, startMin, startMax) {
     noUiSlider.create(slider, {
-        start: [min, max],
+        start: [startMin, startMax],
         connect: true,
         step: 1,
         range: {
-            min: min, 
-            max: max
+            min: rangeMin, 
+            max: rangeMax
         }
     });
 
@@ -245,23 +293,71 @@ function initSlider(slider, minLabel, maxLabel, min, max) {
     });
 }
 
+async function loadFilterOptions() {
+    const { data: hulls } = await _supabase.from('shotshell_loads').select('hull').limit(10000);
+    if (hulls) {
+        const uniqueHulls = [...new Set(hulls.map(item => item.hull))].filter(Boolean).sort();
+        const hullFilter = document.getElementById('hullFilter');
+        uniqueHulls.forEach(hull => {
+            const option = document.createElement('option');
+            option.value = hull;
+            option.innerText = hull;
+            hullFilter.appendChild(option);
+        });
+    }
+
+    const { data: powders } = await _supabase.from('shotshell_loads').select('powder').limit(10000);
+    if (powders) {
+        const uniquePowders = [...new Set(powders.map(item => item.powder))].filter(Boolean).sort();
+        const powderFilter = document.getElementById('powderFilter');
+        uniquePowders.forEach(powder => {
+            const option = document.createElement('option');
+            option.value = powder;
+            option.innerText = powder;
+            powderFilter.appendChild(option);
+        });
+    }
+}
+
 function setUpEventListeners() {
     const searchInput = document.getElementById('searchInput');
     const gaugeFilter = document.getElementById('gaugeFilter');
+    const hullFilter = document.getElementById('hullFilter');
+    const powderFilter = document.getElementById('powderFilter');
+    const sortFilter = document.getElementById('sortFilter');
 
     const debouncedSearch = debounce(searchLoads, 300);
 
     searchInput.addEventListener('input', debouncedSearch);
     gaugeFilter.addEventListener('change', searchLoads);
+    hullFilter.addEventListener('change', searchLoads);
+    powderFilter.addEventListener('change', searchLoads);
+    sortFilter.addEventListener('change', searchLoads);
     
     const favBtn = document.getElementById('viewFavoritesBtn');
     if (favBtn) favBtn.addEventListener('click', toggleFavoritesView);
 }
 
 // 4. Run once on page load
-function initApp() {
-    initSlider(fpsSlider, fpsMinLabel, fpsMaxLabel, 1000, 2000);
-    initSlider(psiSlider, psiMinLabel, psiMaxLabel, 1000, 20000);
+async function initApp() {
+    await loadFilterOptions();
+
+    const params = new URLSearchParams(window.location.search);
+    
+    if (params.has('gauge')) document.getElementById('gaugeFilter').value = params.get('gauge');
+    if (params.has('hull')) document.getElementById('hullFilter').value = params.get('hull');
+    if (params.has('powder')) document.getElementById('powderFilter').value = params.get('powder');
+    if (params.has('search')) document.getElementById('searchInput').value = params.get('search');
+    if (params.has('sort')) document.getElementById('sortFilter').value = params.get('sort');
+
+    const fpsMin = params.has('fps_min') ? Number(params.get('fps_min')) : 1000;
+    const fpsMax = params.has('fps_max') ? Number(params.get('fps_max')) : 2000;
+    const psiMin = params.has('psi_min') ? Number(params.get('psi_min')) : 1000;
+    const psiMax = params.has('psi_max') ? Number(params.get('psi_max')) : 20000;
+
+    initSlider(fpsSlider, fpsMinLabel, fpsMaxLabel, 1000, 2000, fpsMin, fpsMax);
+    initSlider(psiSlider, psiMinLabel, psiMaxLabel, 1000, 20000, psiMin, psiMax);
+    
     setUpEventListeners();
     searchLoads();
 }
