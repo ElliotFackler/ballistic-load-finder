@@ -10,8 +10,9 @@
         body {
             font-family: sans-serif;
             padding: 20px;
-            background: #f4f4f4;
+            background: linear-gradient(135deg, #e9f0ea 0%, #d8dee8 100%);
             margin: 0;
+            min-height: 100vh;
         }
 
         .page-wrapper {
@@ -25,10 +26,13 @@
         .sidebar {
             width: 300px;
             flex-shrink: 0;
-            background: white;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
             padding: 24px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
             position: sticky;
             top: 20px;
         }
